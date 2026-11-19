@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   VIAL design tokens  —  source: docs/vial-design-audit.md §3
+   ========================================================================== */
+
+@theme {
+  /* ---- Colour (audit §3.1) ---- */
+  --color-gold: #c9a84c; /* Incense Gold */
+  --color-brown: #5c4510; /* Altar Brown */
+  --color-sacred: #0a0a0a; /* Sacred Black */
+  --color-white: #ffffff; /* Pure White */
+  --color-cream: #f5edd8; /* Parchment */
+  --color-cream-muted: #e8dfc8;
+  --color-ink: #1c1008; /* text on gold buttons (Get Involved) */
+  --color-spark: #ffbc00; /* eyebrow sparkle inner stop */
+  --color-live: #ea4335;
+  --color-active: #40ff06;
+  --color-disabled: #888888;
+  --color-placeholder: #c2c2c2;
+  --color-line: #d4d4d4;
+  --color-slate: #4a5565;
+  --color-badge-line: #a6a6a6;
+  --color-nigeria: #008751;
+  --color-crimson: #c60300;
+
+  /* ---- Typography (audit §3.2) ---- */
+  --font-display: var(--font-display-face), "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-sans-face), "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --text-intro: clamp(3rem, 1.2rem + 5.6vw, 5.625rem); /* 90 */
+  --text-intro--line-height: 1.05;
+  --text-intro--letter-spacing: -0.035em;
+  --text-hero: clamp(2.75rem, 1.3rem + 4.4vw, 5rem); /* 80 */
+  --text-hero--line-height: 1;
+  --text-hero--letter-spacing: -0.04em;
+  --text-h2: clamp(2.375rem, 1.5rem + 3vw, 4.0625rem); /* 65 */
+  --text-h2--line-height: 1;
+  --text-h2--letter-spacing: -0.04em;
+  --text-h3: clamp(2rem, 1.45rem + 1.6vw, 2.75rem); /* 44 */
+  --text-h3--line-height: 0.9;
+  --text-h3--letter-spacing: -0.03em;
+  --text-h4: clamp(1.75rem, 1.45rem + 0.9vw, 2.375rem); /* 34–38 */
+  --text-h4--line-height: 0.92;
+  --text-h4--letter-spacing: -0.04em;
+  --text-h5: clamp(1.375rem, 1.2rem + 0.5vw, 1.75rem); /* 26–28 */
+  --text-h5--line-height: 1.05;
+  --text-h5--letter-spacing: -0.05em;
+  --text-lead: clamp(1.25rem, 1.15rem + 0.35vw, 1.5rem); /* 22–24 */
+  --text-lead--line-height: 1.05;
+  --text-lead--letter-spacing: -0.04em;
+  --text-body: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem); /* 18 / 24 */
+  --text-body--line-height: 1.3333;
+  --text-body--letter-spacing: -0.04em;
+  --text-body-sm: 0.9375rem; /* 15 */
+  --text-body-sm--line-height: 1.5;
+  --text-body-sm--letter-spacing: -0.02em;
+  --text-eyebrow: clamp(0.875rem, 0.82rem + 0.2vw, 1rem); /* 16 / 24, +0.8px */
+  --text-eyebrow--line-height: 1.5;
+  --text-eyebrow--letter-spacing: 0.05em;
+  --text-button: clamp(1rem, 0.95rem + 0.2vw, 1.125rem); /* 18 */
+  --text-button--line-height: 1.25;
+  --text-button--letter-spacing: -0.01em;
+
+  /* ---- Radii (audit §3.4) ---- */
+  --radius-chip: 10px;
+  --radius-tile: 16px;
+  --radius-card-sm: 20px;
+  --radius-form: 24px;
+  --radius-card: 40px;
+  --radius-panel: 60px;
+
+  /* ---- Shadows (audit §3.6) ---- */
+  --shadow-soft: 0 9px 30px rgb(0 0 0 / 0.2); /* "Testimonial shades" */
+  --shadow-photo: -14px 0 28px rgb(0 0 0 / 0.2);
+  --shadow-form: 0 2.3px 4.6px -2.3px rgb(0 0 0 / 0.1), 0 4.6px 6.9px -1.1px rgb(0 0 0 / 0.1);
+  --shadow-brown-sm: 0 8px 32px rgb(92 69 16 / 0.14);
+  --shadow-brown-md: 0 8px 24px rgb(92 69 16 / 0.25);
+  --shadow-brown-xs: 0 4px 32px rgb(92 69 16 / 0.08);
+  --shadow-deep: 0 24px 64px rgb(0 0 0 / 0.5);
+
+  /* ---- Motion (audit §6) ---- */
+  --ease-vial-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-vial-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --ease-vial-scroll: cubic-bezier(0.43, -0.01, 0.14, 1);
+
+  --breakpoint-3xl: 1600px;
+}
+
+/* ==========================================================================
+   Reusable utilities
+   ========================================================================== */
+
+/* Page container: 1440 canvas → ~1240px content with 100px side padding (audit §3.3). */
+@utility container-vial {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 6.9vw, 6.25rem);
+}
+
+/* Figma "GLASS" effects (audit §3.6). Figma refraction/dispersion has no CSS
+   equivalent; backdrop blur + translucent tint + a light inner edge is used. */
+@utility glass-gold {
+  background-color: rgb(201 168 76 / 0.2);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+@utility glass-gold-strong {
+  background-color: rgb(201 168 76 / 0.6);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.35),
+    inset 0 0 0 1px rgb(255 255 255 / 0.12);
+}
+@utility glass-brown {
+  background-color: rgb(92 69 16 / 0.4);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    inset 0 0 0 1px rgb(255 255 255 / 0.1);
+}
+@utility glass-brown-soft {
+  background-color: rgb(92 69 16 / 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Section background gradients (audit §3.1). */
+@utility bg-fade-cream-white {
+  background-image: linear-gradient(180deg, var(--color-cream) 0%, var(--color-white) 100%);
+}
+@utility bg-fade-white-cream {
+  background-image: linear-gradient(180deg, var(--color-white) 0%, var(--color-cream) 100%);
+}
+@utility bg-fade-cream-brown {
+  background-image: linear-gradient(180deg, var(--color-cream) 0%, var(--color-brown) 100%);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background-color: var(--color-white);
+    color: var(--color-brown);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+  /* Anchor targets clear the fixed header. */
+  [id] {
+    scroll-margin-top: 7.5rem;
+  }
+}
+
+/* ==========================================================================
+   Motion helpers
+   ========================================================================== */
+
+/* Entrance reveal (components/motion/Reveal.tsx). Content is only hidden when
+   scripting is available, so nothing disappears without JavaScript. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal]:not([data-revealed]) {
+    opacity: 0;
+    transform: translate3d(0, 32px, 0);
+  }
+  [data-reveal] {
+    transition:
+      opacity 0.8s var(--ease-vial-out),
+      transform 0.8s var(--ease-vial-out);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+/* Home intro (components/home/HomeHero.tsx). `data-intro="pending"` is set by an
+   inline script before first paint so the intro state never flashes. */
+html[data-intro="pending"] [data-site-header],
+html[data-intro="playing"] [data-site-header] {
+  transform: translate3d(0, -110%, 0);
+}
+html[data-intro="revealing"] [data-site-header] {
+  transition: transform 1.5s var(--ease-vial-out);
+}
+html[data-intro="pending"] [data-hero-media] {
+  clip-path: inset(calc(50% - 39px) calc(50% - 99px) round 40px);
+}
+html[data-intro="pending"] [data-hero-intro] {
+  opacity: 1;
+  visibility: visible;
+}
+html[data-intro="pending"] [data-hero-copy] {
+  transform: translate3d(-110vw, 0, 0);
+}
+html[data-intro="pending"] [data-hero-aside] {
+  transform: translate3d(60vw, 0, 0);
+}
+html[data-intro="pending"] [data-hero-cue] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hide scrollbars on horizontal scrollers while keeping them scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
