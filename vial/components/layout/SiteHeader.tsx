@@ -71,7 +71,8 @@ export function SiteHeader() {
           hidden && !menuOpen && "-translate-y-full",
           // Lighter blur + denser tint: a 24px backdrop blur over the playing hero video re-blurs every video frame.
           dark && "bg-sacred/80 shadow-[inset_0_-1px_0_rgb(255_255_255/0.08)] backdrop-blur-md",
-          !overlay && !dark && "glass-gold bg-white/55",
+          // Figma "Full Scroll" nav: Incense Gold @20 % glass, which reads as a cream bar over the white page.
+          !overlay && !dark && "glass-gold",
         )}
       >
         <div className="container-vial flex h-[4.75rem] items-center justify-between gap-6 lg:h-[7.1875rem]">
@@ -80,7 +81,7 @@ export function SiteHeader() {
           <nav aria-label="Main" className="hidden xl:block">
             <ul className="flex items-center gap-[1.6rem]">
               {mainNav.map((link) => {
-                const active = link.href === pathname;
+                const active = link.href.split("#")[0] === pathname;
                 return (
                   <li key={link.href}>
                     <Link
@@ -89,7 +90,7 @@ export function SiteHeader() {
                       className={cn(
                         "relative py-2 text-base whitespace-nowrap tracking-[-0.02em] transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:scale-x-100",
                         light ? "text-white" : "text-brown",
-                        active && "after:scale-x-100",
+                        active && (light ? "after:scale-x-100" : "text-gold"),
                       )}
                     >
                       {link.label}
@@ -188,7 +189,7 @@ function MobileMenu({ open, onClose, pathname }: { open: boolean; onClose: () =>
                 <Link
                   href={link.href}
                   onClick={onClose}
-                  aria-current={link.href === pathname ? "page" : undefined}
+                  aria-current={link.href.split("#")[0] === pathname ? "page" : undefined}
                   className="flex items-baseline justify-between border-b border-brown/15 py-4 font-display text-[2.25rem] leading-none font-medium tracking-[-0.03em] text-brown aria-[current=page]:italic"
                 >
                   {link.label}

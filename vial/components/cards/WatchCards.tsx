@@ -224,7 +224,8 @@ export function LiveWatchCard({ className }: { className?: string }) {
         <BrandMark tone="light" />
       </span>
       <div className="relative flex flex-col gap-[2.2rem]">
-        <div className="flex flex-wrap gap-4">
+        {/* pr-14 keeps the pills clear of the corner logo; they wrap instead of overlapping it. */}
+        <div className="flex flex-wrap gap-4 pr-14">
           {ready && watch ? (
             <StatusPill kind="live" size="sm">
               Live Now

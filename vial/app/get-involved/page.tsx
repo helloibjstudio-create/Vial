@@ -5,7 +5,7 @@ import { contactDetails } from "@/content/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { ContactForm, GiveForm, NewsletterForm, VolunteerForm } from "@/components/forms/GetInvolvedForms";
 import { MediaFrame } from "@/components/ui/MediaFrame";
-import { Display, Em, Eyebrow, SectionHeading } from "@/components/ui/Typography";
+import { Display, Eyebrow, SectionHeading } from "@/components/ui/Typography";
 
 export const metadata: Metadata = {
   title: "Get Involved",
@@ -27,12 +27,13 @@ export default function GetInvolvedPage() {
         <MediaFrame
           asset="getInvolvedHero"
           eager
-          className="mx-auto mt-0 aspect-square w-[min(100%,36rem)] lg:absolute lg:top-[8.2rem] lg:left-1/2 lg:-z-10 lg:w-1/2 min-[1440px]:left-[32.9rem] min-[1440px]:w-[59.8rem]"
-          sizes="(min-width: 1024px) 957px, 100vw"
+          // Figma: the artwork is clipped to the hero, 914×711 flush with its right and bottom edges, behind the copy.
+          className="mt-[4.75rem] aspect-[914/711] w-full lg:absolute lg:right-0 lg:bottom-0 lg:-z-10 lg:mt-0 lg:w-[63.5%] lg:max-w-[57.125rem]"
+          sizes="(min-width: 1024px) 914px, 100vw"
           labelPosition="bottom-right"
         />
-        <div className="container-vial relative pt-32 pb-20 sm:pt-40 lg:pt-[16.25rem] lg:pb-[14rem]">
-          <div className="flex max-w-[42.9rem] flex-col gap-10 lg:max-w-[46%] min-[1440px]:max-w-[42.9rem]">
+        <div className="container-vial relative pt-12 pb-20 sm:pt-16 lg:pt-[16.25rem] lg:pb-[14rem]">
+          <div className="flex max-w-[42.9rem] flex-col gap-10 lg:max-w-[46%] xl:max-w-[42.9rem]">
             <div className="flex flex-col gap-5">
               <Eyebrow>Get Involved</Eyebrow>
               <Display as="h1" size="hero">
@@ -75,12 +76,7 @@ export default function GetInvolvedPage() {
               }
               body="VIAL needs more than intercessors. We need translators, writers, regional prayer leaders, media contributors, and tech volunteers people who carry the altar in a different way."
             />
-            <MediaFrame asset="missionBg" className="h-[17.5rem] rounded-card-sm" sizes="500px" label={false}>
-              <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-brown/40 to-black/0 to-60%" />
-              <p className="absolute bottom-5 left-6 font-display text-xl leading-[1.875rem] font-medium tracking-[-0.025em] text-white italic">
-                &ldquo;Carry the altar in a different way.&rdquo;
-              </p>
-            </MediaFrame>
+            <MediaFrame asset="volunteerCard" className="h-[17.5rem] rounded-card-sm" sizes="500px" label={false} />
           </Reveal>
           <VolunteerForm />
         </div>
@@ -95,7 +91,7 @@ export default function GetInvolvedPage() {
               eyebrow="Give to the Movement"
               title={
                 <>
-                  Every gift <Em gold>keeps the altar burning.</Em>
+                  Every gift <span className="text-gold">keeps the altar burning.</span>
                 </>
               }
               body="Your generosity sustains prayer networks, technology, and media that carry the gospel of intercession to every nation."

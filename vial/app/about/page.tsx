@@ -83,10 +83,8 @@ export default function AboutPage() {
 
       {/* Our Mission */}
       <section className="relative isolate overflow-hidden bg-sacred">
-        <MediaFrame asset="missionBg" className="absolute inset-0 -z-10" labelPosition="bottom-right">
-          <div aria-hidden="true" className="absolute inset-0 bg-gold/30 mix-blend-multiply" />
-          <div aria-hidden="true" className="absolute inset-0 bg-black/50" />
-        </MediaFrame>
+        {/* The gold colour layer and 50 % black overlay are part of the exported artwork. */}
+        <MediaFrame asset="missionBg" className="absolute inset-0 -z-10" labelPosition="bottom-right" />
         <Reveal className="container-vial flex min-h-[39.4rem] flex-col items-center justify-center gap-5 py-24 text-center">
           <Eyebrow tone="white">Our Mission</Eyebrow>
           <Display tone="white" className="max-w-[47.8rem] tracking-[-0.03em]">

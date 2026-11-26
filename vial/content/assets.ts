@@ -218,11 +218,21 @@ export const assets = {
     tone: "light",
   }),
   getInvolvedHero: asset({
-    src: "/images/watch/ZoomPlayer.svg",
-    alt: "A live video prayer call with 3,235 people joined while the host speaks",
+    src: "/images/volunteer/march.svg",
+    alt: "A line of people carrying flags up a hillside toward a rising sun",
     figma: "3728bcd5…",
     suggestedPath: "/images/get-involved/get-involved-hero.jpg",
     tone: "warm",
+  }),
+
+  // ---------- Get Involved: Volunteer ----------
+  /** Image card beside the volunteer form. The quote, the dark gradient and the rounded corners are part of the artwork. */
+  volunteerCard: asset({
+    src: "/images/volunteer/pray.svg",
+    alt: "Hands clasped in prayer, with the words \u201cCarry the altar in a different way.\u201d",
+    figma: "7aa96754…",
+    suggestedPath: "/images/volunteer/pray.svg",
+    tone: "dark",
   }),
 } satisfies Record<string, ImageAsset>;
 

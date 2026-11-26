@@ -18,7 +18,6 @@ export default function PrayerWallPage() {
     <>
       <InnerHero
         asset="prayerWallHero"
-        fade="left"
         eyebrow="The Prayer Wall"
         title={
           <>

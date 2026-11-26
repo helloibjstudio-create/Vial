@@ -26,9 +26,8 @@ export default function ResourcesPage() {
     <>
       {/* Hero (1176px in Figma) */}
       <section className="relative isolate overflow-hidden bg-cream">
-        <MediaFrame asset="resourcesHero" eager className="absolute inset-0 -z-10" labelPosition="top-right">
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/35 to-white" />
-        </MediaFrame>
+        {/* The white fade to the bottom is part of the exported artwork. */}
+        <MediaFrame asset="resourcesHero" eager className="absolute inset-0 -z-10" labelPosition="top-right" />
         <div className="container-vial relative pt-32 pb-16 sm:pt-40 lg:pt-[16.25rem] lg:pb-[4.75rem]">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex max-w-[42.9rem] flex-col gap-10">
