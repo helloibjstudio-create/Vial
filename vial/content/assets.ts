@@ -211,8 +211,8 @@ export const assets = {
     tone: "warm",
   }),
   resourcesHero: asset({
-    src: "/images/watch/open-hands.svg",
-    alt: "Open, cupped hands with smoke rising between them",
+    src: "/images/resources/book.svg",
+    alt: "Books, pages and phones floating in soft golden light",
     figma: "83d28387…",
     suggestedPath: "/images/resources/resources-hero.jpg",
     tone: "light",
