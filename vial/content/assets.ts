@@ -55,10 +55,10 @@ export const assets = {
   }),
   /** Bento card 1 crop (Figma export, 413×334, sits at the bottom of the card). */
   bentoPhone: asset({
-    src: "/iphone-1.svg",
+    src: "/images/home/bento-phone.png",
     alt: "The VIAL app shown on a phone",
     figma: "ed8a6cf9… (bento crop)",
-    suggestedPath: "/iphone-1.svg",
+    suggestedPath: "/images/home/bento-phone.png",
     tone: "ghost",
   }),
   /** Full cut-out (transparent PNG) — Prayer Wall card strips + Resource card 1. */
@@ -72,28 +72,28 @@ export const assets = {
     height: 1466,
   }),
   prayerPortrait: asset({
-    src: "/Pray.svg",
+    src: "/images/home/bento-prayer.png",
     alt: "Hands folded in prayer",
     figma: "30a3342d…",
     suggestedPath: "/images/shared/prayer-portrait-01.jpg",
     tone: "warm",
   }),
   nations: asset({
-    src: "/earth.svg",
+    src: "/images/home/bento-nations.png",
     alt: "Believers from many nations",
     figma: "780ec90e…",
     suggestedPath: "/images/home/nations.jpg",
     tone: "warm",
   }),
   nightWatch: asset({
-    src: "/fire.svg",
+    src: "/images/home/bento-night-watch.png",
     alt: "A candle burning through the night watch",
     figma: "10e2ea81…",
     suggestedPath: "/images/home/night-watch.jpg",
     tone: "dark",
   }),
   whyVialBg: asset({
-    src: "/hand.svg",
+    src: "/images/home/why-vial-bg.jpg",
      alt: "Golden light over a gathering in worship",
     figma: "40455686…",
     suggestedPath: "/images/home/why-vial-bg.jpg",

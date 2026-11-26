@@ -14,6 +14,8 @@ import { ArrowDown } from "@/components/ui/icons";
 import { downloadHref } from "@/content/site";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, CustomEase);
+// Phones: the address bar showing/hiding resizes the viewport; don't recalculate (and jump) mid-scroll.
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 /**
  * Home hero — the three-stage introduction (audit §5.1, §6), driven by scroll on every device.
@@ -39,12 +41,22 @@ export function HomeHero({ children }: { children: ReactNode }) {
   const root = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Next keeps visited routes mounted (hidden) — pause the video when hidden.
+  // Play the video only while the hero is on screen: once the visitor has scrolled past it,
+  // decoding a hidden 1080p video would compete with the rest of the page for the GPU.
+  // (Next also keeps visited routes mounted but hidden — the cleanup pauses it there.)
   useLayoutEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
-    video.play().catch(() => {});
-    return () => video.pause();
+    const hero = root.current;
+    if (!video || !hero) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else video.pause();
+    });
+    io.observe(hero);
+    return () => {
+      io.disconnect();
+      video.pause();
+    };
   }, []);
 
   useGSAP(
@@ -87,7 +99,7 @@ export function HomeHero({ children }: { children: ReactNode }) {
 
           if (reduce) {
             delete html.dataset.intro;
-            gsap.set(media, { clipPath: STAGE2 });
+            gsap.set(media, { clipPath: "none" });
             gsap.set(shade, { opacity: 1 });
             gsap.set(film, { scale: 1.2 });
             return () => cleanups.forEach((fn) => fn());
@@ -108,7 +120,7 @@ export function HomeHero({ children }: { children: ReactNode }) {
                 trigger: root.current,
                 start: "top top",
                 end: () => `+=${window.innerHeight}`,
-                scrub: 0.6,
+                scrub: 0.4,
                 invalidateOnRefresh: true,
               },
             });
@@ -127,7 +139,8 @@ export function HomeHero({ children }: { children: ReactNode }) {
 
           /** Stage 2 at rest: video open, copy in, extra intro scroll removed. */
           const showOpened = () => {
-            gsap.set(media, { clipPath: STAGE2 });
+            // No clip at all once open: a (no-op) clip-path still makes the browser clip the video every frame.
+            gsap.set(media, { clipPath: "none" });
             gsap.set([introTop, introBottom], { autoAlpha: 0 });
             gsap.set([copy, aside], { x: 0 });
             gsap.set(cue, { autoAlpha: 1 });
@@ -176,7 +189,7 @@ export function HomeHero({ children }: { children: ReactNode }) {
               trigger: root.current,
               start: "top top",
               end: () => `+=${window.innerHeight}`,
-              scrub: 0.6,
+              scrub: 0.4,
               invalidateOnRefresh: true,
               onUpdate: (self) => {
                 // Nav drops in as the video finishes opening (CSS transitions it in).
@@ -230,7 +243,7 @@ export function HomeHero({ children }: { children: ReactNode }) {
       <div className="sticky top-0 h-lvh w-full overflow-hidden">
         <div
           data-hero-media=""
-          className="absolute inset-0 will-change-[clip-path]"
+          className="absolute inset-0"
         >
           <div data-hero-film="" className="absolute inset-0 origin-center will-change-transform">
           {heroVideo.src ? (

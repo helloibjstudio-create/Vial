@@ -22,7 +22,7 @@ function BentoCard({ className, children }: { className?: string; children: Reac
   return (
     <div
       className={cn(
-        "relative isolate overflow-hidden rounded-[2.75rem] border border-white/15 shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] backdrop-blur-[2px]",
+        "relative isolate overflow-hidden rounded-[2.75rem] border border-white/15 shadow-[inset_0_1px_0_rgb(255_255_255/0.18)]",
         className,
       )}
     >
@@ -103,7 +103,7 @@ export function WhyVialExists() {
   return (
     <section className="relative isolate overflow-hidden bg-sacred">
       <MediaFrame asset="whyVialBg" className="absolute inset-0 -z-10" labelPosition="bottom-right">
-        {/* hand.svg already has the gold colour blend baked in, so no extra gold overlay. */}
+        {/* why-vial-bg already has the gold colour blend baked in, so no extra gold overlay. */}
         {/* Overall dim: mutes the gold to the deep olive-brown of the design. */}
         <div aria-hidden="true" className="absolute inset-0 bg-sacred/30" />
         {/* Dark top so this section blends out of "More Than an App" (black). */}

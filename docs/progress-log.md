@@ -180,3 +180,11 @@ Automated check: no horizontal page overflow, no element past the viewport, no c
 - Root-cause fix: `gsap.matchMedia().add()` only fires when one of its queries matches. The old `{reduce, lg}` conditions never matched on phones (< 1024px, motion allowed), so the intro animation never ran on mobile. Both motion states are now listed.
 - Header: on home, the "scrolled"/auto-hide thresholds start after the opening screen, so the transparent nav sits over the full-screen video as in Figma.
 - Follow-up: the opening now plays **once per page load**. When it completes, the extra screen of scroll is removed (track → 100lvh) and the scroll position shifted to match, so scrolling back to the top shows the open video. A reload at the top shows the intro again. Landing mid-page (restored scroll) skips it. Click/tap anywhere on the intro opens it.
+
+## 2026-11-26 — Smoothness pass (hero video + animation)
+Measured with Playwright at 4× CPU throttle (long-animation-frame + rAF timing). Script work was small; the cost was compositing/decoding:
+- **Heavy SVGs replaced:** the bento + Why-VIAL images were Figma SVG exports embedding 1.3–16 MP PNGs (`fire.svg` 2607×4094 for a 414×563 card, `iphone-1.svg` 4000×2668 for 413×334). next/image can't optimise SVG, so each was decoded at full size right as the intro animates. Rasterised at 2× display size to `images/home/bento-*.png` + `why-vial-bg.jpg` (~1.3 MB total, down from 12.4 MB, and served as WebP by next/image). The SVGs were removed.
+- **Blur over the playing video:** removed the invisible 2px backdrop blur on the four bento cards; the header's dark state uses a 12px blur with a denser tint instead of 24px (re-blurred every video frame).
+- **Video:** clip-path is cleared (`none`) once the intro has opened; the video only plays while the hero is on screen (IntersectionObserver).
+- **Scroll:** scrub 0.6 → 0.4 (tracks the scroll more tightly); `ignoreMobileResize` so the phone address bar doesn't trigger recalculation mid-scroll; header scroll handler throttled to one update per frame.
+- Result (same throttled test): ~30–40% more frames rendered while scrolling the hero, on desktop and phone. Production build verified; behaviour unchanged.

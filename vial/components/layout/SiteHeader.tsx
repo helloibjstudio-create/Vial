@@ -26,7 +26,9 @@ export function SiteHeader() {
   const lastY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
       const y = window.scrollY;
       // Home, while the intro is still opening (HomeHero sets <html data-intro>): the first screen of
       // scrolling opens the video, so count the thresholds from there. Afterwards that screen is gone.
@@ -36,9 +38,16 @@ export function SiteHeader() {
       setHidden(goingDown && y > base + 160);
       lastY.current = y;
     };
-    onScroll();
+    // At most one update per frame, however many scroll events arrive.
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, [isHome]);
 
   // Close the menu on route change.
@@ -60,7 +69,8 @@ export function SiteHeader() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-[transform,background-color,box-shadow] duration-500 ease-[var(--ease-vial-out)]",
           hidden && !menuOpen && "-translate-y-full",
-          dark && "bg-sacred/65 shadow-[inset_0_-1px_0_rgb(255_255_255/0.08)] backdrop-blur-xl backdrop-saturate-150",
+          // Lighter blur + denser tint: a 24px backdrop blur over the playing hero video re-blurs every video frame.
+          dark && "bg-sacred/80 shadow-[inset_0_-1px_0_rgb(255_255_255/0.08)] backdrop-blur-md",
           !overlay && !dark && "glass-gold bg-white/55",
         )}
       >
