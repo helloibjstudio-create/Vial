@@ -167,21 +167,21 @@ export const assets = {
 
   // ---------- About ----------
   aboutHero: asset({
-    src: null,
+    src: "/images/about/oil and hand.svg",
     alt: "An open Bible in warm light",
     figma: "cf2dd450…",
     suggestedPath: "/images/about/about-hero.jpg",
     tone: "light",
   }),
   altarFire: asset({
-    src: null,
+    src: "/images/about/kneel-pray.svg",
     alt: "Fire burning on an altar",
     figma: "33ebad6c…",
     suggestedPath: "/images/shared/altar-fire.jpg",
     tone: "gold",
   }),
   missionBg: asset({
-    src: null,
+    src: "/images/about/pray-hand.svg",
     alt: "A crowd gathered in prayer",
     figma: "7aa96754…",
     suggestedPath: "/images/shared/mission-bg.jpg",
