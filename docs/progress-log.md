@@ -173,3 +173,10 @@ Automated check: no horizontal page overflow, no element past the viewport, no c
   Verified: `content-type: video/mp4`, range requests (206), CORS `*`, plays in the hero. Pinned to the commit, so the CDN caches it permanently.
 - Override without code changes: `NEXT_PUBLIC_HERO_VIDEO_URL` / `NEXT_PUBLIC_HERO_VIDEO_WEBM_URL` (`content/assets.ts`).
 - The original master was moved to `/media-source/` (git-ignored) so it stays on disk but is never committed or served again. Older commits still hold it in LFS.
+
+## 2026-11-26 — Scroll-driven hero intro (phone + desktop)
+- The "Incense Rising / from the Nations" intro now **holds until the visitor scrolls**, and the first screen of scrolling opens the video pill to full screen (words exit, headline and nav enter). The second screen runs stage 2 → 3 ("More Than an App"), then the page continues. It replays whenever you return to the top (no once-per-session autoplay). Click/tap on the intro plays the opening.
+- Layout: the stage-2 copy sticks inside a 200lvh track (`data-hero-track`); one scrubbed GSAP timeline drives both phases. With reduced motion the track collapses to 100lvh and the hero is static.
+- Root-cause fix: `gsap.matchMedia().add()` only fires when one of its queries matches. The old `{reduce, lg}` conditions never matched on phones (< 1024px, motion allowed), so the intro animation never ran on mobile. Both motion states are now listed.
+- Header: on home, the "scrolled"/auto-hide thresholds start after the opening screen, so the transparent nav sits over the full-screen video as in Figma.
+- Follow-up: the opening now plays **once per page load**. When it completes, the extra screen of scroll is removed (track → 100lvh) and the scroll position shifted to match, so scrolling back to the top shows the open video. A reload at the top shows the intro again. Landing mid-page (restored scroll) skips it. Click/tap anywhere on the intro opens it.

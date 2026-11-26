@@ -28,15 +28,18 @@ export function SiteHeader() {
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 40);
+      // Home, while the intro is still opening (HomeHero sets <html data-intro>): the first screen of
+      // scrolling opens the video, so count the thresholds from there. Afterwards that screen is gone.
+      const base = isHome && document.documentElement.dataset.intro ? window.innerHeight : 0;
+      setScrolled(y > base + 40);
       const goingDown = y > lastY.current;
-      setHidden(goingDown && y > 160);
+      setHidden(goingDown && y > base + 160);
       lastY.current = y;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
   // Close the menu on route change.
   const [menuPath, setMenuPath] = useState(pathname);

@@ -12,30 +12,28 @@ import { MediaFrame } from "@/components/ui/MediaFrame";
 import { Em } from "@/components/ui/Typography";
 import { ArrowDown } from "@/components/ui/icons";
 import { downloadHref } from "@/content/site";
-import { INTRO_SESSION_KEY } from "@/lib/intro";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, CustomEase);
 
 /**
- * Home hero — the three-stage animated introduction (audit §5.1, §6).
+ * Home hero — the three-stage introduction (audit §5.1, §6), driven by scroll on every device.
  *
  *  Stage 1  Intro (frame 199:9948): dark page, "Incense Rising / from the Nations"
- *           around a 198×78 video pill in the centre.
- *  Stage 2  Hero (frame 239:7970): the pill expands to fill the whole screen; nav drops in, headline enters from the left, side copy
- *           from the right; intro words exit left/right. Smart Animate, ease-out, 1.5s.
- *  Stage 3  Content (top of 239:8140): media goes full-bleed with a black fade,
- *           hero copy exits, "More Than an App" rises into view. Driven by scroll
- *           here (the prototype advances on click / video end); the gold cue scrolls
- *           there over 2s with cubic-bezier(.43,-.01,.14,1).
+ *           around a 198×78 video pill in the centre. Holds until the visitor scrolls.
+ *  1 → 2    First screen of scrolling (the hero is pinned): the pill opens up to the
+ *           full-screen video, the intro words exit left/right, the headline enters from
+ *           the left, the side copy from the right and the nav drops in (frame 239:7970).
+ *           A click / tap on the intro plays the same opening by scrolling for you.
+ *           It plays once per page load; scrolling back to the top shows the open video.
+ *  2 → 3    Second screen: the film grows past the edges with a black fade, the hero copy
+ *           exits and "More Than an App" rises into view; then the page carries on.
+ *           The gold cue scrolls there over 2s with cubic-bezier(.43,-.01,.14,1).
  *
- * The intro plays once per browser session on a full page load. Any wheel, touch,
- * key or click skips to the end. With reduced motion it is skipped entirely.
+ * With reduced motion everything is static at stage 2 and the extra scroll track collapses.
  */
 
-/** The video fills the whole screen once the intro pill has expanded. */
-const STAGE3 = "inset(0px 0px 0px 0px round 0px)";
-const STAGE2_DESKTOP = STAGE3;
-const STAGE2_MOBILE = STAGE3;
+/** The video fills the whole screen once the intro pill has opened (stage 2 and 3). */
+const STAGE2 = "inset(0px 0px 0px 0px round 0px)";
 
 export function HomeHero({ children }: { children: ReactNode }) {
   const root = useRef<HTMLElement>(null);
@@ -62,16 +60,18 @@ export function HomeHero({ children }: { children: ReactNode }) {
       const aside = q("[data-hero-aside]")[0];
       const cue = q("[data-hero-cue]")[0];
       const content = q("[data-hero-content]")[0];
+      const track = q("[data-hero-track]")[0] as HTMLElement | undefined;
       if (!media || !root.current) return;
 
       const scrollEase = CustomEase.create("vialScroll", "M0,0 C0.43,-0.01 0.14,1 1,1");
       const mm = gsap.matchMedia();
 
       mm.add(
-        { reduce: "(prefers-reduced-motion: reduce)", lg: "(min-width: 1024px)" },
+        // gsap.matchMedia only runs the callback when at least one query matches, so list both
+        // motion states (a single "reduce" query would never fire for most visitors / on phones).
+        { reduce: "(prefers-reduced-motion: reduce)", motion: "(prefers-reduced-motion: no-preference)" },
         (ctx) => {
-          const { reduce, lg } = ctx.conditions as { reduce: boolean; lg: boolean };
-          const stage2 = lg ? STAGE2_DESKTOP : STAGE2_MOBILE;
+          const { reduce } = ctx.conditions as { reduce: boolean };
           const cleanups: (() => void)[] = [];
 
           const onCueClick = (e: Event) => {
@@ -87,14 +87,23 @@ export function HomeHero({ children }: { children: ReactNode }) {
 
           if (reduce) {
             delete html.dataset.intro;
-            gsap.set(media, { clipPath: stage2 });
+            gsap.set(media, { clipPath: STAGE2 });
             gsap.set(shade, { opacity: 1 });
             gsap.set(film, { scale: 1.2 });
             return () => cleanups.forEach((fn) => fn());
           }
 
-          const startScrollScene = () => {
-            const tl = gsap.timeline({
+          const pill = () => {
+            const w = root.current!.clientWidth;
+            const h = window.innerHeight;
+            return `inset(${(h - 78) / 2}px ${(w - 198) / 2}px ${(h - 78) / 2}px ${(w - 198) / 2}px round 40px)`;
+          };
+
+          /** Stage 2 → 3 over one screen of scrolling (after the intro has opened). */
+          let stage3: gsap.core.Timeline | null = null;
+          const startStage3 = () => {
+            stage3 = gsap.timeline({
+              defaults: { ease: "none" },
               scrollTrigger: {
                 trigger: root.current,
                 start: "top top",
@@ -103,68 +112,105 @@ export function HomeHero({ children }: { children: ReactNode }) {
                 invalidateOnRefresh: true,
               },
             });
-            tl.fromTo(media, { clipPath: stage2 }, { clipPath: STAGE3, ease: "none" }, 0)
-              // Stage 3: the film grows past the screen edges (Figma: 1722px wide on the 1440 frame ≈ 1.2×).
-              .fromTo(film, { scale: 1 }, { scale: 1.2, ease: "none" }, 0)
-              .fromTo(shade, { opacity: 0 }, { opacity: 1, ease: "none" }, 0)
-              .to(copy, { x: "-110vw", ease: "power1.in" }, 0)
-              .to(aside, { x: "60vw", ease: "power1.in" }, 0)
-              .to(cue, { autoAlpha: 0, ease: "none", duration: 0.4 }, 0);
+            // The film grows past the screen edges (Figma: 1722px wide on the 1440 frame ≈ 1.2×).
+            stage3
+              .fromTo(film, { scale: 1 }, { scale: 1.2 }, 0)
+              .fromTo(shade, { opacity: 0 }, { opacity: 1 }, 0)
+              .fromTo(copy, { x: 0 }, { x: "-110vw", ease: "power1.in" }, 0)
+              .fromTo(aside, { x: 0 }, { x: "60vw", ease: "power1.in" }, 0)
+              .fromTo(cue, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.4 }, 0);
+          };
+          cleanups.push(() => {
+            stage3?.scrollTrigger?.kill();
+            stage3?.kill();
+          });
+
+          /** Stage 2 at rest: video open, copy in, extra intro scroll removed. */
+          const showOpened = () => {
+            gsap.set(media, { clipPath: STAGE2 });
+            gsap.set([introTop, introBottom], { autoAlpha: 0 });
+            gsap.set([copy, aside], { x: 0 });
+            gsap.set(cue, { autoAlpha: 1 });
+            if (track) track.style.height = "100lvh";
+            delete html.dataset.intro;
+            startStage3();
+            ScrollTrigger.refresh();
           };
 
-          if (html.dataset.intro === "pending") {
-            const w = root.current!.clientWidth;
-            const h = window.innerHeight;
-            const pill = `inset(${(h - 78) / 2}px ${(w - 198) / 2}px ${(h - 78) / 2}px ${(w - 198) / 2}px round 40px)`;
-
-            gsap.set(media, { clipPath: pill });
-            gsap.set([introTop, introBottom], { autoAlpha: 1 });
-            gsap.set(copy, { x: "-110vw" });
-            gsap.set(aside, { x: "60vw" });
-            gsap.set(cue, { autoAlpha: 0 });
-            html.dataset.intro = "playing";
-
-            const intro = gsap.timeline({
-              delay: 1.1,
-              defaults: { duration: 1.5, ease: "power2.out" },
-              onStart: () => {
-                html.dataset.intro = "revealing";
-              },
-              onComplete: () => {
-                html.dataset.intro = "done";
-                try {
-                  sessionStorage.setItem(INTRO_SESSION_KEY, "1");
-                } catch {}
-                gsap.set([introTop, introBottom], { autoAlpha: 0 });
-                startScrollScene();
-                ScrollTrigger.refresh();
-              },
-            });
-            intro
-              .to(media, { clipPath: stage2 }, 0)
-              .to(introTop, { x: "110vw" }, 0)
-              .to(introBottom, { x: "-110vw" }, 0)
-              .to(copy, { x: 0 }, 0)
-              .to(aside, { x: 0 }, 0)
-              .to(cue, { autoAlpha: 1, duration: 0.9 }, 0.6);
-
-            const skip = () => {
-              if (intro.progress() < 1) {
-                html.dataset.intro = "revealing";
-                intro.progress(1);
-              }
-            };
-            const events = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
-            events.forEach((ev) => window.addEventListener(ev, skip, { once: true, passive: true }));
-            cleanups.push(() => {
-              events.forEach((ev) => window.removeEventListener(ev, skip));
-              intro.kill();
-            });
-          } else {
-            delete html.dataset.intro;
-            gsap.set(media, { clipPath: stage2 });
-            startScrollScene();
+          // Landing part-way down the page (reload / back navigation restores the scroll position):
+          // skip the intro rather than replaying it under the visitor.
+          if (window.scrollY > 10) {
+            showOpened();
+            return () => cleanups.forEach((fn) => fn());
           }
+
+          // Stage 1 state (also painted before hydration by the boot script + CSS).
+          gsap.set(media, { clipPath: pill() });
+          gsap.set([introTop, introBottom], { autoAlpha: 1, x: 0 });
+          gsap.set(copy, { x: "-110vw" });
+          gsap.set(aside, { x: "60vw" });
+          gsap.set(cue, { autoAlpha: 0 });
+          html.dataset.intro = "playing";
+
+          // The opening plays ONCE per page load, scrubbed over the first screen of the 200lvh track
+          // (stage 2 is sticky meanwhile). When it completes, that screen of scroll is removed and the
+          // scroll position shifted by the same amount, so scrolling back up never replays it.
+          let opened = false;
+          const finishIntro = () => {
+            if (opened) return;
+            opened = true;
+            gsap.killTweensOf(window); // stop a click-triggered auto-scroll
+            const before = track?.offsetHeight ?? 0;
+            const y = window.scrollY;
+            intro.scrollTrigger?.kill();
+            intro.kill();
+            showOpened();
+            const removed = before - (track?.offsetHeight ?? before);
+            window.scrollTo({ top: Math.max(0, y - removed), behavior: "instant" });
+            ScrollTrigger.update();
+          };
+
+          const intro = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: {
+              trigger: root.current,
+              start: "top top",
+              end: () => `+=${window.innerHeight}`,
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+              onUpdate: (self) => {
+                // Nav drops in as the video finishes opening (CSS transitions it in).
+                const next = self.progress < 0.84 ? "playing" : "revealing";
+                if (!opened && html.dataset.intro !== next) html.dataset.intro = next;
+              },
+            },
+            // Fires when the scrubbed playhead (not just the scrollbar) reaches the end.
+            onComplete: finishIntro,
+          });
+          intro
+            .fromTo(media, { clipPath: () => pill() }, { clipPath: STAGE2, ease: "power1.inOut", duration: 1 }, 0)
+            .to(introTop, { x: "110vw", ease: "power1.in", duration: 0.8 }, 0)
+            .to(introBottom, { x: "-110vw", ease: "power1.in", duration: 0.8 }, 0)
+            .to(copy, { x: 0, ease: "power2.out", duration: 0.8 }, 0.2)
+            .to(aside, { x: 0, ease: "power2.out", duration: 0.8 }, 0.2)
+            .to(cue, { autoAlpha: 1, duration: 0.3 }, 0.7);
+
+          // Click / tap on the intro screen: play the opening by scrolling one screen (Figma advances on click).
+          const onIntroClick = (e: Event) => {
+            if (opened) return;
+            if ((e.target as Element).closest("a,button")) return;
+            gsap.to(window, { duration: 1.6, ease: "power2.inOut", scrollTo: { y: window.innerHeight, autoKill: true } });
+          };
+          // On the whole hero: the sticky stage-2 layer sits above the video and receives the click.
+          const hero = root.current!;
+          hero.addEventListener("click", onIntroClick);
+          cleanups.push(() => hero.removeEventListener("click", onIntroClick));
+          cleanups.push(() => {
+            intro.scrollTrigger?.kill();
+            intro.kill();
+            if (track) track.style.height = "";
+            delete html.dataset.intro;
+          });
 
           return () => cleanups.forEach((fn) => fn());
         },
@@ -234,8 +280,11 @@ export function HomeHero({ children }: { children: ReactNode }) {
       </div>
 
       <div className="relative -mt-[100lvh]">
-        {/* Stage 2 content */}
-        <div className="relative h-lvh overflow-hidden">
+        {/* Scroll track: 200lvh = one screen to open the intro + one screen for stage 2 → 3.
+            Stage 2 sticks for the first screen so the opening plays in place; once the intro has
+            opened, HomeHero shrinks this to 100lvh (the opening never replays on scroll-up). */}
+        <div data-hero-track="" className="relative h-[200lvh] motion-reduce:h-lvh">
+        <div className="sticky top-0 h-lvh overflow-hidden">
           <p
             data-hero-aside=""
             className="absolute top-[9.5rem] right-[clamp(1.5rem,5.6vw,5rem)] hidden w-[18.7rem] text-body text-white md:block lg:top-[12.5rem]"
@@ -273,6 +322,7 @@ export function HomeHero({ children }: { children: ReactNode }) {
           >
             <ArrowDown className="size-7" />
           </a>
+        </div>
         </div>
 
         {/* Stage 3 content */}
