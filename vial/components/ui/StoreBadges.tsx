@@ -5,7 +5,7 @@ import Image from "next/image";
 /**
  * App store badges (Figma component set `Store download button` 83:9595).
  * Official Apple/Google badge artwork and the store URLs are pending (audit §7, §10);
- * badges render as inert elements until `storeLinks` are set.
+ * badges render as buttons that go nowhere until `storeLinks` are set, then as links.
  */
 type BadgeStyle = "solid" | "outline" | "cream";
 
@@ -34,7 +34,7 @@ function Badge({
     size === "sm" && "h-[2.15rem] gap-1.5 rounded-[5px] border-[0.85px] px-2.5",
     size === "md" && "h-[3.4rem] gap-2.5 rounded-[12px] px-4",
     size === "lg" && "h-[4.5rem] gap-3 rounded-[20px] border-2 px-6 lg:h-[5.5rem] lg:px-7",
-    href && "hover:bg-white/10",
+    "cursor-pointer hover:bg-white/10 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current",
   );
   // Store logos exported from Figma at 18×21 (native size for the small badge); scaled by height for larger badges.
   const glyph = size === "sm" ? "h-[21px]" : size === "md" ? "h-[29px]" : "h-[37px] lg:h-[46px]";
@@ -59,9 +59,10 @@ function Badge({
   );
   if (!href) {
     return (
-      <span className={classes} aria-label={`${label} — coming soon`} role="img" title="Store link coming soon">
+      // Placeholder button until the store URL is set: clickable, but goes nowhere.
+      <button type="button" className={classes} aria-label={`${kicker} ${label}`}>
         {inner}
-      </span>
+      </button>
     );
   }
   return (
