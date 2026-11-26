@@ -73,11 +73,11 @@ export default function ResourcesPage() {
             </div>
           </div>
 
-          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:mt-[10.75rem] lg:grid-cols-4 lg:gap-0.5">
+          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:mt-[10.75rem] xl:grid-cols-4 xl:gap-0.5">
             {resources.map((r, i) => (
               <Reveal key={r.id} delay={i * 80}>
                 <div id={`resource-${r.id}`} className="rounded-card target:ring-4 target:ring-gold target:ring-offset-4 target:ring-offset-white">
-                  <ResourceCard resource={r} withCta className="h-[20.6rem]" />
+                  <ResourceCard resource={r} withCta className="w-full" />
                 </div>
               </Reveal>
             ))}

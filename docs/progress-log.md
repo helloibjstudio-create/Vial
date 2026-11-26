@@ -99,3 +99,77 @@ Every page was built mobile-first and checked at 390, 768 and 1440 px. There is 
    - Gold text on white fails AA for body text (it is only used at display sizes).
    - The glass Download pill has low contrast on light backgrounds; it was kept as designed.
 8. The Figma intro advances on click or when the video ends; on the web it auto-plays after a short hold. When the video is supplied, advancing on `ended` can be added.
+
+---
+
+## 2026-11-26 — Landing-page images from Figma
+- Exported the original source images through the Figma MCP (`download_assets`, read-only) and wired them into `content/assets.ts`:
+  - Watch carousel: `watch-01.jpg` (8f163512, node 259:474), `watch-02.jpg` (c8f669e6), `watch-03.jpg` (2e89fd2c, node 259:510).
+  - Donation band: `give-band.jpg` (47190027, node 292:8696). Also used on About.
+  - Testimonials: `testimonial-deborah.jpg` (6e16ba71), `testimonial-esther.jpg` (e68b9eee).
+- Converted PNG → progressive JPEG (q85). Alt text rewritten to describe the actual photos.
+- **Still pending on home:** resource cards `resourceSounds` (c2a21523), `resourceTeaching` (2e016a33), `resourceFasting` (194da84d), and the Flutterwave logo (node 305:8903). The Starter-plan MCP limit was hit again before these could be exported. Resource-card nodes: 288:8633, 288:8637, 288:8642.
+- Note: the Figma home frame now contains designs for Section 7 (rest) and Section 8 (Prayer Wall cards). The site still shows placeholders there.
+
+---
+
+## 2026-11-26 — Landing-page images from Figma (exact treatment)
+Source: Figma MCP `download_assets` (read-only) on 239:8140 and individual nodes. Every image's placement was **matched numerically against Figma's own renders** (correlation search), not eyeballed.
+
+**Images now live**
+| Where | File | Figma | Treatment |
+|---|---|---|---|
+| Watch carousel ×3 | `images/home/watch-01.jpg`, `images/shared/watch-02.jpg`, `images/home/watch-03.jpg` | 8f163512, c8f669e6, 2e89fd2c | cover, `object-position 50% 72%`, **gold Color blend** |
+| Donation band (home + About) | `images/shared/give-band.jpg` | 47190027 / 292:8696 | cover, `50% 65%`, **gold Color blend** |
+| Testimonials | `testimonial-deborah.jpg`, `testimonial-esther.jpg` | 6e16ba71, e68b9eee | natural colour |
+| Prayer Wall cards (home §8 + /prayer-wall) | `images/shared/prayer-hands.png` | 30a3342d | 185×512 strip, starts 76px above the text, clipped by the card bottom |
+| Resource card 1 | `prayer-hands.png` | 30a3342d | 320px wide at (87, −52) on the 321×330 card |
+| Resource card 2 | `images/shared/resource-sounds.png` | 95be9632 | gold Color blend baked in; 180px wide at (142, 64) |
+| Hero poster | `media/hero-poster.jpg` | 62515ae6 (4K still) | — |
+| Powered By | `partners/{flutterwave,paypal,stripe}.png` | 7cfb3c71, 55eba15b; Flutterwave from Wikimedia Commons (official mark) | — |
+
+- "Gold tint" = Figma layer #C9A84C in **Color** blend at 100 %. Reproduced with `MediaFrame tint="gold"` (CSS `mix-blend-mode: color`); mean error vs the Figma export ≈ 0.9 %.
+- Home §7 (story + 01–03) and §8 (Prayer Wall stack) were built from the updated Figma frame; the placeholders are gone. The stack is shared with /prayer-wall (`PrayerWallStack`).
+- Resource cards were redesigned to the new Figma style (gold card + 3D gold object), which also applies on /resources.
+- Watch cards: button reads "Join This Watch" when live, otherwise "Set Reminder" (→ /prayer-watch#commit), as in Figma.
+
+**Still missing** (Starter-plan MCP limit): resource art for *Teaching & Sermon* (gold book) and *Fasting Plans*. Nodes 288:8637 and 288:8642.
+- Testimonial photos ("He hears. He answers.", also on /prayer-wall): Figma's "Rectangle 40488" is a vector whose left edge is a diagonal leaning right at the top (116px in at y=0, 0 at y=458 on the 350×458 frame), with rounded corners. Reproduced with an SVG `clipPath` (objectBoundingBox) + drop-shadow on a wrapper. The photo now overlays the right 53 % of the card so the quote keeps Figma's 297px measure. Below `sm` the photo stacks on top as a plain rounded image.
+
+### Section-by-section pass against the Figma render (239:8140)
+Compared every home section side by side with Figma's full-frame render at 1440px; section heights now match within ~10px.
+- **He hears (§6):** heading breaks onto 2 lines as in Figma. Cards are 659px wide from x=120 and the row runs off the right edge (horizontal scroll), as designed.
+- **Prayer Wall (§8):** heading on 3 lines; card heights 550/520/490 with ~60px gaps; counts shown as in Figma ("1221", no separator).
+- **Story (§7):** 01–03 cards use the gold **left** edge + soft shadow from Figma (no full border).
+- **Resources (§9):** 1329px row of 321px cards; titles break onto 2 lines as in Figma (`cardTitle`).
+- **Watch cards (§4):** title box 277px ("Morning Prayer" wraps as in Figma); corner mark is now a globe line icon (Figma 257:430). The icon is redrawn, since the vector couldn't be exported (MCP limit).
+- **Footer:** "Vial" watermark moved/scaled to Figma's position.
+
+Intentionally not changed (open decisions):
+- Watch card times/status: Figma shows 9am–12pm "Live Now" / "Active". The site keeps the central schedule and live status (decision #10; "Active" undefined).
+- Display-font glyphs differ until Editor's Note is supplied (Cormorant is the stand-in).
+
+## 2026-11-26 — Globe icon, resource art, responsive pass
+- **Watch-card globe:** replaced the redrawn icon with the exact Figma vector (257:430), extracted from the card-frame SVG Figma exported (`9e7b0e7b…`).
+- **Resource cards:** now keep Figma's 321×330 proportions at every width (`aspect-[321/330]`), so the object art scales with the card instead of being cropped. /resources no longer forces a fixed height.
+- **Still missing:** art for *Teaching & Sermon* (288:8637) and *Fasting Plans* (288:8642). The Figma MCP Starter limit still blocks the export.
+
+### Responsive pass (all 7 routes at 320 / 375 / 414 / 768 / 1024 / 1280 / 1440 / 1920)
+Automated check: no horizontal page overflow, no element past the viewport, no console errors at any width. Visual review at 375 / 768 / 1024 / 1280.
+- Header: full nav from `xl` (1280); menu button below. At 1024 the six links were wrapping onto two lines.
+- Footer: below `xl` the "Vial" watermark sits at the bottom of the card (it overlapped the link columns); 4-column layout from `xl`, 2×2 below.
+- Inner heroes with a side image (Prayer Watch, Get Involved): copy limited to the left half between 1024 and 1440 (heading ran under the image). From 1440 the Figma geometry is used.
+- Home bento: "The Watch Never Goes Dark." scales and wraps below `xl` (it was clipped).
+- Resource grids: 1 → 2 → 4 columns (4 from `xl`).
+- Watch feature cards: photo pinned to the card bottom, so the cards line up on tablet.
+- Prayer Watch grid card: buttons wrap at 320px. The commit section's column no longer grows past the viewport.
+- Get Involved newsletter: the email field collapsed to ~20px tall on mobile (`flex-1` in a column); fixed.
+- Prayer Wall page headings use the Figma 3-line break.
+
+## 2026-11-26 — Hero video hosted by URL
+- The 128 MB 4K master (`public/Upscaled hero video.mp4`, Git LFS) was replaced by a link. Compressed to 1080p / 30 fps / H.264 / no audio (the video is muted) / faststart: **4.0 MB**, visually identical at display size.
+- Hosted on the repo's **`media` branch** (media only, not merged into main) and served by **jsDelivr**:
+  `https://cdn.jsdelivr.net/gh/helloibjstudio-create/Vial@89dc091b732cd7105435bfe0d78949f88dd084f5/vial-hero-1080p.mp4`
+  Verified: `content-type: video/mp4`, range requests (206), CORS `*`, plays in the hero. Pinned to the commit, so the CDN caches it permanently.
+- Override without code changes: `NEXT_PUBLIC_HERO_VIDEO_URL` / `NEXT_PUBLIC_HERO_VIDEO_WEBM_URL` (`content/assets.ts`).
+- The original master was moved to `/media-source/` (git-ignored) so it stays on disk but is never committed or served again. Older commits still hold it in LFS.

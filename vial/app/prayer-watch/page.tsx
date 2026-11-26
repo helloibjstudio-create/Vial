@@ -79,7 +79,7 @@ export default function PrayerWatchPage() {
 
       {/* Commit to a Watch */}
       <section id="commit" className="bg-fade-white-cream py-20 lg:py-[4.56rem]">
-        <div className="container-vial grid items-center gap-12 lg:grid-cols-[minmax(0,33rem)_minmax(0,38rem)] lg:justify-between lg:gap-[6.9rem]">
+        <div className="container-vial grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[minmax(0,33rem)_minmax(0,38rem)] lg:justify-between lg:gap-[6.9rem]">
           <Reveal className="flex flex-col gap-5">
             <SectionHeading
               eyebrow="Commit to a Watch"

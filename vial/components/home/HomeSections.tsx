@@ -4,11 +4,12 @@ import { featuredWatchIds, getWatch } from "@/content/watches";
 import type { AssetKey } from "@/content/assets";
 import { cn } from "@/lib/cn";
 import { Reveal } from "@/components/motion/Reveal";
-import { ResourceCard } from "@/components/cards/Cards";
+import { NumberedCard, ResourceCard } from "@/components/cards/Cards";
 import { WatchFeatureCard } from "@/components/cards/WatchCards";
 import { Button } from "@/components/ui/Button";
 import { MediaFrame } from "@/components/ui/MediaFrame";
-import { PendingDesign } from "@/components/ui/PendingDesign";
+import { PrayerWallStack } from "@/components/sections/shared";
+import { downloadHref } from "@/content/site";
 import { StoreBadges } from "@/components/ui/StoreBadges";
 import { Display, Eyebrow, SectionHeading } from "@/components/ui/Typography";
 import { Sparkle } from "@/components/ui/icons";
@@ -83,7 +84,7 @@ export function MoreThanAnApp() {
         <BentoCard className="min-h-[30rem] md:col-span-2 lg:col-span-1 lg:col-start-3 lg:row-span-2 lg:row-start-1 lg:h-[35.2rem]">
           {/* Figma export (414×563) covers the whole card. */}
           <MediaFrame asset="nightWatch" pendingTone="ghost" className="absolute inset-0" imgClassName="object-bottom" sizes="(min-width: 1024px) 414px, 100vw" labelPosition="bottom-right" />
-          <p className="relative z-10 pt-[5.56rem] pl-[2.3rem] font-display text-[clamp(2.5rem,2rem+1.4vw,3.4375rem)] leading-[0.89] font-semibold tracking-[-0.04em] whitespace-nowrap text-white italic">
+          <p className="relative z-10 pt-[5.56rem] pl-[2.3rem] font-display text-[clamp(2.25rem,1.2rem+2.4vw,3.4375rem)] leading-[0.89] font-semibold tracking-[-0.04em] text-white italic xl:whitespace-nowrap">
             The Watch
             <br />
             Never Goes Dark.
@@ -220,14 +221,20 @@ export function AppShowcase() {
 }
 
 /* =========================================================================
-   Section 7 — partially inspected (frame 239:8140, y≈5558–6667)
+   Section 7 — "The VIAL App / Carry the altar…" story + 01–03 (node 275:8272)
    ========================================================================= */
 
-export function AppStoryPartial() {
+const pillars = [
+  { number: "01", title: "Daily Prayer Watches", body: "Round-the-clock intercession anchored in the eight biblical watches. Every hour covered. Every nation represented." },
+  { number: "02", title: "Strategic Intercession", body: "Prayer that is targeted, informed, and sustained for global transformation, revival, and the Church." },
+  { number: "03", title: "Technology & Unity", body: "Empowering believers through tools, teaching, and connection so no intercessor prays alone." },
+];
+
+export function AppStory() {
   return (
-    <section className="bg-fade-cream-white py-20 lg:py-24">
-      <div className="container-vial grid items-center gap-12 lg:grid-cols-[minmax(0,36rem)_1fr] lg:gap-[5.6rem]">
-        <Reveal>
+    <section className="bg-fade-cream-white py-20 lg:pt-24 lg:pb-[6.1rem]">
+      <div className="container-vial grid items-center gap-12 lg:grid-cols-[minmax(0,36rem)_minmax(0,36.5rem)] lg:justify-between">
+        <Reveal className="flex flex-col items-start gap-5">
           <SectionHeading
             eyebrow="The VIAL App"
             title={
@@ -238,28 +245,71 @@ export function AppStoryPartial() {
               </>
             }
           />
+          <div className="flex max-w-[31.4rem] flex-col gap-6 text-body text-brown">
+            <p>
+              The Golden Vials Initiative was born in prayer from a deep encounter with the image in Revelation 5:8. A vision of elders
+              before the throne, holding golden vials full of the prayers of the saints, rising as incense before God.
+            </p>
+            <p>
+              That image became a mandate. If the prayers of the saints are gathered and held before God then the Church must pray.
+              Continuously. Collectively. Across every border, every language, every time zone.
+            </p>
+          </div>
+          <Button href={downloadHref} variant="glass">
+            Download the Vial
+          </Button>
         </Reveal>
-        <PendingDesign title="Golden Vials Initiative story — remainder of Section 7" figmaRef="frame 239:8140 · Section 7 (node 275:8272)">
-          Known so far: the eyebrow and heading shown here, followed by a paragraph that begins “The Golden Vials Initiative was born in
-          prayer from a deep encounter with the image i…” (truncated in the inspection) and a right-hand column of unknown content.
-        </PendingDesign>
+        <div className="flex flex-col gap-5">
+          {pillars.map((p, i) => (
+            <Reveal key={p.number} delay={i * 90}>
+              <NumberedCard
+                number={p.number}
+                title={p.title}
+                className="min-h-[18.25rem] items-center border-0 py-14 shadow-[-5px_0_0_0_var(--color-gold),0_14px_34px_rgb(0_0_0/0.12)] lg:py-[3.9rem]"
+              >
+                {p.body}
+              </NumberedCard>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 /* =========================================================================
-   Section 8 — not inspected (frame 239:8140, y≈6667–8987, ≈2,320px)
+   Section 8 — "The Prayer Wall / Every need. Every nation. Every prayer counted." (node 275:8417)
    ========================================================================= */
 
-export function HomeSection8Pending() {
+export function HomePrayerWall() {
   return (
-    <section className="bg-white py-20 lg:py-24">
+    <section className="bg-white pt-20 pb-24 lg:pt-[5.4rem] lg:pb-[5.4rem]">
       <div className="container-vial">
-        <PendingDesign title="Home — Section 8" figmaRef="frame 239:8140 · Section 8 (y ≈ 6,667–8,987)">
-          This ≈2,320px section between the Section 7 story and the Resources Hub preview could not be read before the Figma
-          limit. Its content and layout will be implemented from the original frame.
-        </PendingDesign>
+        <Reveal className="flex flex-col items-center gap-5">
+          <SectionHeading
+            align="center"
+            eyebrow="The Prayer Wall"
+            title={
+              <>
+                Every need.
+                <br />
+                Every nation.
+                <br />
+                Every prayer counted.
+              </>
+            }
+            className="max-w-[36rem]"
+          />
+          <div className="flex flex-wrap items-start justify-center gap-5">
+            <Button href="/prayer-wall#request" variant="glass">
+              Post a Prayer Request
+            </Button>
+            <Button href="/prayer-wall" variant="outline-brown">
+              View Full Prayer Wall
+            </Button>
+          </div>
+        </Reveal>
+        <PrayerWallStack className="mt-14 lg:mt-24" />
       </div>
     </section>
   );
@@ -276,13 +326,13 @@ export function ResourcesPreview() {
         <Reveal>
           <SectionHeading align="center" eyebrow="Resources Hub" title="Everything you need to pray deeper." className="mx-auto max-w-[45rem]" />
         </Reveal>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-[0.94rem]">
-          {resources.map((r, i) => (
-            <Reveal key={r.id} delay={i * 90}>
-              <ResourceCard resource={r} />
-            </Reveal>
-          ))}
-        </div>
+      </div>
+      <div className="mx-auto mt-12 grid max-w-[83.06rem] gap-4 px-5 sm:grid-cols-2 lg:mt-20 lg:gap-[0.94rem] xl:grid-cols-4 min-[1440px]:px-0">
+        {resources.map((r, i) => (
+          <Reveal key={r.id} delay={i * 90}>
+            <ResourceCard resource={r} />
+          </Reveal>
+        ))}
       </div>
     </section>
   );

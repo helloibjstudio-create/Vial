@@ -34,6 +34,8 @@ export const testimonials: Testimonial[] = [
 export interface Resource {
   id: "guides" | "sounds" | "teaching" | "fasting";
   title: string;
+  /** Title as broken on the 321×330 card in Figma (line breaks as "\n"). */
+  cardTitle: string;
   filterLabel: string;
   description: string;
   cta: string;
@@ -46,15 +48,17 @@ export const resources: Resource[] = [
   {
     id: "guides",
     title: "Prayer Guides",
+    cardTitle: "Prayer\nGuides",
     filterLabel: "Prayer Guides",
     description: "Thematic PDF guides for healing, nations, the church, and personal breakthrough.",
     cta: "Browse Guides",
-    image: "prayerPortrait",
+    image: "prayerHands",
     href: null,
   },
   {
     id: "sounds",
     title: "Soaking Sounds",
+    cardTitle: "Soaking\nSounds",
     filterLabel: "Soaking Sounds",
     description: "Curated worship instrumentals and prayer soundscapes. Soft piano, strings, rainfall.",
     cta: "Open Player",
@@ -64,6 +68,7 @@ export const resources: Resource[] = [
   {
     id: "teaching",
     title: "Teaching & Sermon",
+    cardTitle: "Teaching\n& Sermon",
     filterLabel: "Sermons",
     description: "Short messages from seasoned prayer warriors on intercession, fasting, and spiritual warfare.",
     cta: "Watch Now",
@@ -73,6 +78,7 @@ export const resources: Resource[] = [
   {
     id: "fasting",
     title: "Fasting Plans",
+    cardTitle: "Fasting\nPlans",
     filterLabel: "Fasting Plans",
     description: "3-day, 7-day, and 21-day guided plans with daily scriptures, prayer focus, and reminders.",
     cta: "Start a Fast",

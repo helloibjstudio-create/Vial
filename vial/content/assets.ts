@@ -40,8 +40,8 @@ export const assets = {
 
   // ---------- Home ----------
   heroVideoPoster: asset({
-    src: null, // poster IMAGE only (shown while the video loads), e.g. "/media/hero-poster.jpg"
-    alt: "A person kneeling in prayer in a dimly lit room",
+    src: "/media/hero-poster.jpg",
+    alt: "A person praying alone in a dim room by a curtained window",
     figma: "VIDEO fill on 239:7971 (poster frame)",
     suggestedPath: "/media/hero-poster.jpg",
     tone: "dark",
@@ -60,6 +60,16 @@ export const assets = {
     figma: "ed8a6cf9… (bento crop)",
     suggestedPath: "/iphone-1.svg",
     tone: "ghost",
+  }),
+  /** Full cut-out (transparent PNG) — Prayer Wall card strips + Resource card 1. */
+  prayerHands: asset({
+    src: "/images/shared/prayer-hands.png",
+    alt: "Hands pressed together in prayer",
+    figma: "30a3342d…",
+    suggestedPath: "/images/shared/prayer-hands.png",
+    tone: "ghost",
+    width: 1076,
+    height: 1466,
   }),
   prayerPortrait: asset({
     src: "/Pray.svg",
@@ -90,46 +100,48 @@ export const assets = {
     tone: "gold",
   }),
   watch01: asset({
-    src: null,
-    alt: "Intercessor praying",
+    src: "/images/home/watch-01.jpg",
+    alt: "A figure with arms raised on a mountaintop under a stormy, lightning-lit sky",
     figma: "8f163512…",
     suggestedPath: "/images/home/watch-01.jpg",
     tone: "warm",
   }),
   watch02: asset({
-    src: null,
-    alt: "Intercessor praying at dawn",
+    src: "/images/shared/watch-02.jpg",
+    alt: "Cupped hands lifted in prayer as incense smoke rises",
     figma: "c8f669e6…",
     suggestedPath: "/images/shared/watch-02.jpg",
     tone: "warm",
   }),
   watch03: asset({
-    src: null,
-    alt: "Morning prayer",
+    src: "/images/home/watch-03.jpg",
+    alt: "An open Bible and a steaming cup on a wooden table in morning light",
     figma: "2e89fd2c…",
     suggestedPath: "/images/home/watch-03.jpg",
     tone: "warm",
   }),
   testimonialDeborah: asset({
-    src: null,
-    alt: "Portrait of Deborah",
+    src: "/images/shared/testimonial-deborah.jpg",
+    alt: "A smiling woman embracing a recovering patient in a hospital ward",
     figma: "6e16ba71…",
     suggestedPath: "/images/shared/testimonial-deborah.jpg",
     tone: "warm",
   }),
   testimonialEsther: asset({
-    src: null,
-    alt: "Portrait of Esther",
+    src: "/images/shared/testimonial-esther.jpg",
+    alt: "A woman sitting by a window at night overlooking city lights",
     figma: "e68b9eee…",
     suggestedPath: "/images/shared/testimonial-esther.jpg",
     tone: "warm",
   }),
   resourceSounds: asset({
-    src: null,
-    alt: "Soaking sounds — instruments at rest",
-    figma: "c2a21523…",
-    suggestedPath: "/images/shared/resource-sounds.jpg",
+    src: "/images/shared/resource-sounds.png",
+    alt: "A gold musical note",
+    figma: "95be9632… (gold Color blend baked in)",
+    suggestedPath: "/images/shared/resource-sounds.png",
     tone: "warm",
+    width: 200,
+    height: 345,
   }),
   resourceTeaching: asset({
     src: null,
@@ -146,8 +158,8 @@ export const assets = {
     tone: "warm",
   }),
   giveBand: asset({
-    src: null,
-    alt: "Hands lifted in worship",
+    src: "/images/shared/give-band.jpg",
+    alt: "A hand planting a seed in dark soil",
     figma: "47190027…",
     suggestedPath: "/images/shared/give-band.jpg",
     tone: "gold",
@@ -217,11 +229,19 @@ export const assets = {
 export type AssetKey = keyof typeof assets;
 
 /**
- * The hero background video. Approved: a static background is used until the
- * original video is supplied. Set `src` (MP4) and optionally `webm` to enable it.
+ * The hero background video — hosted outside the repo and loaded by URL.
+ *
+ * The file (1080p, 30 fps, H.264, no audio, 4 MB, compressed from the 128 MB 4K master)
+ * lives on the `media` branch of the GitHub repo and is served by the jsDelivr CDN with
+ * the correct `video/mp4` type. The URL is pinned to that branch's commit, so it never
+ * changes under the site. To swap the video, set NEXT_PUBLIC_HERO_VIDEO_URL (and optionally
+ * NEXT_PUBLIC_HERO_VIDEO_WEBM_URL) or push a new file to `media` and update the commit below.
  */
+const HERO_VIDEO_CDN =
+  "https://cdn.jsdelivr.net/gh/helloibjstudio-create/Vial@89dc091b732cd7105435bfe0d78949f88dd084f5/vial-hero-1080p.mp4";
+
 export const heroVideo: { src: string | null; webm: string | null; poster: AssetKey } = {
-  src: "/Upscaled%20hero%20video.mp4", // public/Upscaled hero video.mp4
-  webm: null,
+  src: process.env.NEXT_PUBLIC_HERO_VIDEO_URL || HERO_VIDEO_CDN,
+  webm: process.env.NEXT_PUBLIC_HERO_VIDEO_WEBM_URL || null,
   poster: "heroVideoPoster",
 };

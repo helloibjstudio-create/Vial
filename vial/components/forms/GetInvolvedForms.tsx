@@ -217,7 +217,7 @@ export function NewsletterForm() {
           autoComplete="email"
           placeholder="Enter your email"
           aria-invalid={error("email") ? true : undefined}
-          className="h-12 min-w-0 flex-1 rounded-full border border-brown/22 bg-white/60 px-5 text-[0.9375rem] tracking-[-0.02em] text-brown outline-none placeholder:text-brown/40 focus:border-brown/60 aria-invalid:border-crimson"
+          className="h-12 w-full min-w-0 shrink-0 rounded-full border border-brown/22 sm:w-auto sm:flex-1 bg-white/60 px-5 text-[0.9375rem] tracking-[-0.02em] text-brown outline-none placeholder:text-brown/40 focus:border-brown/60 aria-invalid:border-crimson"
         />
         <button
           type="submit"

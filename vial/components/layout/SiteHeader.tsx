@@ -64,8 +64,8 @@ export function SiteHeader() {
         <div className="container-vial flex h-[4.75rem] items-center justify-between gap-6 lg:h-[7.1875rem]">
           <Logo tone={light ? "light" : "brown"} />
 
-          <nav aria-label="Main" className="hidden lg:block">
-            <ul className="flex items-center gap-[1.4rem] xl:gap-[1.6rem]">
+          <nav aria-label="Main" className="hidden xl:block">
+            <ul className="flex items-center gap-[1.6rem]">
               {mainNav.map((link) => {
                 const active = link.href === pathname;
                 return (
@@ -74,7 +74,7 @@ export function SiteHeader() {
                       href={link.href}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "relative py-2 text-[0.95rem] tracking-[-0.02em] transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:scale-x-100 xl:text-base",
+                        "relative py-2 text-base whitespace-nowrap tracking-[-0.02em] transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:scale-x-100",
                         light ? "text-white" : "text-brown",
                         active && "after:scale-x-100",
                       )}
@@ -94,7 +94,7 @@ export function SiteHeader() {
             <button
               type="button"
               className={cn(
-                "grid size-11 place-items-center rounded-full lg:hidden",
+                "grid size-11 place-items-center rounded-full xl:hidden",
                 light ? "text-white" : "text-brown",
                 dark && "bg-white/10",
                 !light && "bg-white/50",
@@ -156,7 +156,7 @@ function MobileMenu({ open, onClose, pathname }: { open: boolean; onClose: () =>
       aria-hidden={!open}
       inert={!open}
       className={cn(
-        "fixed inset-0 z-40 bg-cream transition-[opacity,visibility] duration-500 lg:hidden",
+        "fixed inset-0 z-40 bg-cream transition-[opacity,visibility] duration-500 xl:hidden",
         open ? "visible opacity-100" : "invisible opacity-0",
       )}
     >

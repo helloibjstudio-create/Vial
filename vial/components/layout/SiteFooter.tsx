@@ -8,16 +8,16 @@ export function SiteFooter() {
   return (
     <footer className="bg-fade-white-cream pt-16 pb-12 lg:pt-[11.8rem] lg:pb-[3.75rem]">
       <div className="mx-auto max-w-[90rem] px-3 sm:px-[1.1875rem]">
-        <div className="relative overflow-hidden rounded-card bg-gold px-6 py-14 sm:px-12 lg:min-h-[41rem] lg:px-[10.25rem] lg:pt-[5.4rem]">
+        <div className="relative overflow-hidden rounded-card bg-gold px-6 pt-14 pb-[44vw] sm:px-12 lg:px-16 lg:pt-[5.4rem] xl:min-h-[41rem] xl:px-[10.25rem] xl:pb-14">
           {/* Giant clipped watermark (Editor's Note Semibold Italic 800 / #F5EDD8). */}
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute top-[42%] left-[1.6rem] font-display text-[clamp(13rem,55vw,50rem)] leading-[0.8] font-semibold tracking-[-0.06em] text-cream italic select-none"
+            className="pointer-events-none absolute bottom-[-0.12em] left-[1.6rem] font-display text-[48vw] xl:top-[51%] xl:bottom-auto xl:left-[5.5rem] xl:text-[clamp(13rem,61vw,55rem)] leading-[0.8] font-semibold tracking-[-0.06em] text-cream italic select-none"
           >
             Vial
           </span>
 
-          <div className="relative grid gap-12 md:grid-cols-2 lg:grid-cols-[minmax(0,21rem)_auto_auto_auto] lg:gap-x-[6.25rem]">
+          <div className="relative grid gap-12 md:grid-cols-2 xl:grid-cols-[minmax(0,21rem)_auto_auto_auto] lg:gap-x-16 xl:gap-x-[6.25rem]">
             <div className="flex max-w-[22.5rem] flex-col gap-[1.875rem]">
               <Logo tone="light" />
               <p className="font-display text-2xl leading-[0.96] font-medium tracking-[-0.03em] text-cream">

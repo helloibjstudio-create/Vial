@@ -30,6 +30,12 @@ interface MediaFrameProps {
   imgClassName?: string;
   /** Override the asset's placeholder tone while `src` is null (e.g. "ghost" on gradient cards). */
   pendingTone?: AssetTone;
+  /**
+   * Figma's gold photo treatment: a #C9A84C layer in "Color" blend mode at 100 %
+   * over the image (luminance from the photo, hue + saturation from Incense Gold).
+   * CSS `mix-blend-mode: color` is the same W3C formula, so this matches the export.
+   */
+  tint?: "gold";
   children?: ReactNode;
 }
 
@@ -42,11 +48,12 @@ export function MediaFrame({
   labelPosition = "bottom-left",
   imgClassName,
   pendingTone,
+  tint,
   children,
 }: MediaFrameProps) {
   const a = assets[key];
   return (
-    <div className={cn("relative overflow-hidden", className)}>
+    <div className={cn("relative overflow-hidden", tint && "isolate", className)}>
       {a.src ? (
         <Image
           src={a.src}
@@ -79,6 +86,7 @@ export function MediaFrame({
           )}
         </div>
       )}
+      {tint === "gold" && a.src && <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gold mix-blend-color" />}
       {children}
     </div>
   );

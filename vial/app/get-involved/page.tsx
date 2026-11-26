@@ -27,12 +27,12 @@ export default function GetInvolvedPage() {
         <MediaFrame
           asset="getInvolvedHero"
           eager
-          className="mx-auto mt-0 aspect-square w-[min(100%,36rem)] lg:absolute lg:top-[8.2rem] lg:left-[32.9rem] lg:-z-10 lg:w-[59.8rem]"
+          className="mx-auto mt-0 aspect-square w-[min(100%,36rem)] lg:absolute lg:top-[8.2rem] lg:left-1/2 lg:-z-10 lg:w-1/2 min-[1440px]:left-[32.9rem] min-[1440px]:w-[59.8rem]"
           sizes="(min-width: 1024px) 957px, 100vw"
           labelPosition="bottom-right"
         />
         <div className="container-vial relative pt-32 pb-20 sm:pt-40 lg:pt-[16.25rem] lg:pb-[14rem]">
-          <div className="flex max-w-[42.9rem] flex-col gap-10">
+          <div className="flex max-w-[42.9rem] flex-col gap-10 lg:max-w-[46%] min-[1440px]:max-w-[42.9rem]">
             <div className="flex flex-col gap-5">
               <Eyebrow>Get Involved</Eyebrow>
               <Display as="h1" size="hero">

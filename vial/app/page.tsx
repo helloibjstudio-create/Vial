@@ -2,8 +2,8 @@ import { HomeHero } from "@/components/home/HomeHero";
 import {
   AltarAlwaysLit,
   AppShowcase,
-  AppStoryPartial,
-  HomeSection8Pending,
+  AppStory,
+  HomePrayerWall,
   MoreThanAnApp,
   ResourcesPreview,
   WhyVialExists,
@@ -21,8 +21,8 @@ export default function HomePage() {
       <AltarAlwaysLit />
       <AppShowcase />
       <TestimonialsSection />
-      <AppStoryPartial />
-      <HomeSection8Pending />
+      <AppStory />
+      <HomePrayerWall />
       <ResourcesPreview />
       <GiveSection />
     </>

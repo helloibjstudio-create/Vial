@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { prayerRequests } from "@/content/collections";
 import { downloadHref } from "@/content/site";
-import { cn } from "@/lib/cn";
 import { Reveal } from "@/components/motion/Reveal";
-import { PrayerRequestCard } from "@/components/cards/Cards";
 import { PrayerRequestForm } from "@/components/forms/PrayerRequestForm";
-import { InnerHero, TestimonialsSection } from "@/components/sections/shared";
+import { InnerHero, PrayerWallStack, TestimonialsSection } from "@/components/sections/shared";
 import { Button } from "@/components/ui/Button";
 import { ComingSoonButton } from "@/components/ui/ComingSoon";
 import { SectionHeading } from "@/components/ui/Typography";
@@ -15,9 +12,6 @@ export const metadata: Metadata = {
   description: "Every need. Every nation. Every prayer counted. Bring your request to the VIAL Prayer Wall.",
 };
 
-/** Progressive widths of the stacked cards (Figma: 1200 → 1220 → 1240). */
-const stackInset = ["lg:mx-[1.25rem]", "lg:mx-[0.625rem]", "lg:mx-0"];
-
 /** Prayer Wall — Figma frame 369:9336 (audit §5.4). */
 export default function PrayerWallPage() {
   return (
@@ -26,7 +20,15 @@ export default function PrayerWallPage() {
         asset="prayerWallHero"
         fade="left"
         eyebrow="The Prayer Wall"
-        title="Every need. Every nation. Every prayer counted."
+        title={
+          <>
+            Every need.
+            <br />
+            Every nation.
+            <br />
+            Every prayer counted.
+          </>
+        }
         actions={
           <>
             <Button href={downloadHref} variant="glass">
@@ -44,7 +46,15 @@ export default function PrayerWallPage() {
       <section id="wall" className="bg-white pt-20 pb-24 lg:pt-[5.4rem] lg:pb-[5.4rem]">
         <div className="container-vial">
           <Reveal className="flex flex-col items-center gap-5">
-            <SectionHeading align="center" eyebrow="The Prayer Wall" title="Every need. Every nation. Every prayer counted." className="max-w-[36rem]" />
+            <SectionHeading align="center" eyebrow="The Prayer Wall" title={
+          <>
+            Every need.
+            <br />
+            Every nation.
+            <br />
+            Every prayer counted.
+          </>
+        } className="max-w-[36rem]" />
             <div className="flex flex-wrap items-start justify-center gap-5">
               <Button href={downloadHref} variant="glass">
                 Download the Vial
@@ -55,18 +65,7 @@ export default function PrayerWallPage() {
             </div>
           </Reveal>
 
-          {/* Sticky "card stack": each card pins slightly lower than the last so they pile up while scrolling. */}
-          <ol className="mx-auto mt-14 flex max-w-[77.5rem] flex-col gap-6 lg:mt-24 lg:gap-[5rem]">
-            {prayerRequests.map((request, i) => (
-              <li
-                key={request.id}
-                className={cn("lg:sticky", stackInset[i])}
-                style={{ top: `calc(8.5rem + ${i * 2.25}rem)` }}
-              >
-                <PrayerRequestCard request={request} className="shadow-soft lg:shadow-none" />
-              </li>
-            ))}
-          </ol>
+          <PrayerWallStack className="mt-14 lg:mt-24" />
         </div>
       </section>
 
