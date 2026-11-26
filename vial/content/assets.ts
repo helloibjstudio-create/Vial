@@ -168,21 +168,21 @@ export const assets = {
   // ---------- About ----------
   aboutHero: asset({
     src: "/images/about/oil and hand.svg",
-    alt: "An open Bible in warm light",
+    alt: "Golden oil poured from an ornate vessel into an open hand",
     figma: "cf2dd450…",
     suggestedPath: "/images/about/about-hero.jpg",
     tone: "light",
   }),
   altarFire: asset({
     src: "/images/about/kneel-pray.svg",
-    alt: "Fire burning on an altar",
+    alt: "A person kneeling with arms raised in prayer beside a lit candle and a Bible, others praying in the light behind",
     figma: "33ebad6c…",
     suggestedPath: "/images/shared/altar-fire.jpg",
     tone: "gold",
   }),
   missionBg: asset({
     src: "/images/about/pray-hand.svg",
-    alt: "A crowd gathered in prayer",
+    alt: "Hands clasped together in prayer",
     figma: "7aa96754…",
     suggestedPath: "/images/shared/mission-bg.jpg",
     tone: "dark",
@@ -190,35 +190,35 @@ export const assets = {
 
   // ---------- Inner page heroes ----------
   joinHero: asset({
-    src: null,
+    src: "/images/join/hands.svg",
     alt: "An intercessor at prayer",
     figma: "e6ebf196…",
     suggestedPath: "/images/join/join-hero.jpg",
     tone: "light",
   }),
   prayerWallHero: asset({
-    src: null,
+    src: "/images/prayer/pray-glass.svg",
     alt: "Prayer requests gathered on a wall",
     figma: "3920ca88…",
     suggestedPath: "/images/prayer-wall/prayer-wall-hero.jpg",
     tone: "light",
   }),
   prayerWatchHero: asset({
-    src: null,
+    src: "/images/watch/earth-pray.svg",
     alt: "An intercessor keeping watch",
     figma: "8ca3db60…",
     suggestedPath: "/images/prayer-watch/prayer-watch-hero.jpg",
     tone: "warm",
   }),
   resourcesHero: asset({
-    src: null,
+    src: "/images/watch/open-hands.svg",
     alt: "Prayer resources laid out on a table",
     figma: "83d28387…",
     suggestedPath: "/images/resources/resources-hero.jpg",
     tone: "light",
   }),
   getInvolvedHero: asset({
-    src: null,
+    src: "/images/watch/ZoomPlayer.svg",
     alt: "Volunteers serving together",
     figma: "3728bcd5…",
     suggestedPath: "/images/get-involved/get-involved-hero.jpg",
